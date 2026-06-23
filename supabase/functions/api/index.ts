@@ -8,9 +8,10 @@ const corsHeaders = {
 };
 
 // Inicializa cliente Supabase com a SERVICE ROLE KEY (acesso total ao DB)
+// As credenciais vem das variáveis de ambiente do Supabase (Deno.env)
 const supabase = createClient(
-  Deno.env.get("https://ijxmwwebgtefctohevgz.supabase.co/rest/v1/") ?? "",
-  Deno.env.get("sb_secret_D-e7NHjTZxBoalLR26mazg_12buYJxj") ?? ""
+  Deno.env.get("SUPABASE_URL") ?? "",
+  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
 );
 
 // BACKEND: Edge Function API RESTful
