@@ -55,7 +55,7 @@ export default function Home() {
       <section className="relative h-[80vh] min-h-[500px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-junina-600 via-junina-500 to-junina-700">
           <div className="absolute inset-0 opacity-10" style={{
-            backgroundImage: 'url("https://images.pexels.com/photos/3184183/pexels-photo-3184183.jpeg")',
+            backgroundImage: 'url("https://images.pexels.com/photos/9211779/pexels-photo-9211779.jpeg")',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }} />
