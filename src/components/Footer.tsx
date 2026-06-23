@@ -14,6 +14,7 @@ export default function Footer() {
             <p className="text-sm text-stone-400 leading-relaxed">
               Celebrando as tradições juninas com alegria, comida boa e muita dança!
               Venha participar conosco.
+              
             </p>
           </div>
           <div>
@@ -47,7 +48,7 @@ export default function Footer() {
           <p className="flex items-center justify-center gap-1">
             Feito com <Heart className="w-4 h-4 text-red-500 fill-red-500" /> para a Festa Junina Escolar
           </p>
-          <p className="mt-2">Projeto Educacional - Desenvolvimento de Sistemas</p>
+          <p className="mt-2">Página exemplo de TCC feita pelo professor Antonio Carlos - Projeto Educacional - Desenvolvimento de Sistemas - 2026</p>
         </div>
       </div>
     </footer>
