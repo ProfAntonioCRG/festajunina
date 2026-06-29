@@ -20,6 +20,7 @@ export default function Admin() {
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [showForm, setShowForm] = useState(false);
   const [message, setMessage] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
   const [barracasList, setBarracasList] = useState<any[]>([]);
 
   useEffect(() => {
@@ -70,10 +71,14 @@ export default function Admin() {
 
   const handleSave = async () => {
     setLoading(true);
-    if (editing) {
-      await supabase.from(activeTab).update(formData).eq('id', editing);
-    } else {
-      await supabase.from(activeTab).insert(formData);
+    setErrorMsg('');
+    const { error } = editing
+      ? await supabase.from(activeTab).update(formData).eq('id', editing)
+      : await supabase.from(activeTab).insert(formData);
+    if (error) {
+      setErrorMsg(`Erro ao salvar: ${error.message}`);
+      setLoading(false);
+      return;
     }
     setShowForm(false);
     setEditing(null);
@@ -81,14 +86,20 @@ export default function Admin() {
     setMessage(editing ? 'Atualizado com sucesso!' : 'Criado com sucesso!');
     setTimeout(() => setMessage(''), 3000);
     await fetchData();
-    if (activeTab !== 'dashboard') await fetchDashboard();
+    await fetchDashboard();
     setLoading(false);
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm('Tem certeza que deseja excluir?')) return;
     setLoading(true);
-    await supabase.from(activeTab).delete().eq('id', id);
+    setErrorMsg('');
+    const { error } = await supabase.from(activeTab).delete().eq('id', id);
+    if (error) {
+      setErrorMsg(`Erro ao excluir: ${error.message}`);
+      setLoading(false);
+      return;
+    }
     await fetchData();
     await fetchDashboard();
     setLoading(false);
@@ -96,7 +107,13 @@ export default function Admin() {
 
   const handleApprove = async (id: string, aprovada: boolean) => {
     setLoading(true);
-    await supabase.from('quadrilhas').update({ aprovada }).eq('id', id);
+    setErrorMsg('');
+    const { error } = await supabase.from('quadrilhas').update({ aprovada }).eq('id', id);
+    if (error) {
+      setErrorMsg(`Erro: ${error.message}`);
+      setLoading(false);
+      return;
+    }
     await fetchData();
     setLoading(false);
   };
@@ -200,6 +217,12 @@ export default function Admin() {
             {message && (
               <div className="mb-4 p-4 bg-green-50 text-green-700 rounded-lg text-sm font-medium">
                 {message}
+              </div>
+            )}
+            {errorMsg && (
+              <div className="mb-4 p-4 bg-red-50 text-red-700 rounded-lg text-sm font-medium flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                {errorMsg}
               </div>
             )}
 

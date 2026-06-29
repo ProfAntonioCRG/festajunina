@@ -1,8 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 
-// Contexto de autenticação - gerencia o estado de login do usuário
-// Frontend: Provedor de contexto que envolve a aplicação e disponibiliza dados de auth
 interface AuthContextType {
   user: { id: string; email: string } | null;
   loading: boolean;
@@ -18,21 +16,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Verifica se há sessão ativa ao carregar a aplicação
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        setUser({ id: session.user.id, email: session.user.email ?? '' });
-      }
-      setLoading(false);
-    });
-
-    // Listener para mudanças de estado de autenticação
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
         setUser({ id: session.user.id, email: session.user.email ?? '' });
       } else {
         setUser(null);
       }
+      setLoading(false);
     });
 
     return () => subscription.unsubscribe();
